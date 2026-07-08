@@ -34,8 +34,8 @@ class Controller:
     def handleSelezione(self,e):
         self._view._txt_result.controls.clear()
         soglia = self._view._txtInN.value
-        art = self._view._ddArtista.value
-        if soglia is None or art is None:
+        artId = self._view._ddArtista.value
+        if soglia is None or artId is None:
             self._view._txt_result.controls.append(ft.Text(f"riempire entrambe i campi richiesti!!!", color= "red"))
             self._view.update()
             return
@@ -45,6 +45,11 @@ class Controller:
         except (ValueError, TypeError):
             self._view._txt_result.controls.append(
                 ft.Text("Inserire un numero intero valido!", color="red"))
+            self._view.update()
+            return
+        art = self._model._idMap.get(int(artId))  # <-- risali all'oggetto Artista dall'ID
+        if art is None:
+            self._view._txt_result.controls.append(ft.Text("Artista non valido!", color="red"))
             self._view.update()
             return
 

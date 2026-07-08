@@ -56,7 +56,7 @@ class DAO():
         cursor = conn.cursor(dictionary=True)
         query = """select distinct p.PlaylistId as playlist
                     from album a , track t ,playlisttrack p 
-                    where a.AlbumId = t.AlbumId and t.TrackId = p.PlaylistId
+                    where a.AlbumId = t.AlbumId and t.TrackId = p.TrackId
                     and a.ArtistId = %s"""
 
         cursor.execute(query, (id,))
