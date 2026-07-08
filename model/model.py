@@ -30,8 +30,8 @@ class Model:
             self._grafo.add_node(n)
             self._idMap[n.ArtistId] = n
         for art in self._grafo.nodes():
-            art.brani.append(DAO.getAllBrani(art.ArtistId))
-            art.playlist.append(DAO.getAllPlaylist(art.ArtistId))
+            art.brani.extend(DAO.getAllBrani(art.ArtistId))
+            art.playlist.extend(DAO.getAllPlaylist(art.ArtistId))
 
         self.addEdgesPesati()
 
@@ -61,10 +61,10 @@ class Model:
 
     def getSottoinsiemeOttimo(self, soglia,art):
         self._bestScore = 0  # <------- float("inf") se MINIMIZZI
-        self._optList = [art]
+        self._optList = []
         candidati = [n for n in self._grafo.nodes()
                      if n is not art]  # <------- PRE-FILTRO intrinseco (se assente: tutti i nodi)
-        self._ricorsione_sub(candidati, soglia, [], 0)
+        self._ricorsione_sub(candidati, soglia, [art], 0)
         return self._optList, self._bestScore
 
     def _ricorsione_sub(self, candidati, soglia, parziale, index):
@@ -93,19 +93,13 @@ class Model:
         return score
 
     def compatibile(self, nodo, parziale):
-        cond = False
-        count = 0
+        almeno_un_vicino = False
         for n in parziale:
-           if count >=1:
-               cond = True
-               break
-           if nodo not in self._grafo.neighbors(n):
-               continue
-           count +=1
-           if self._grafo.has_edge(n, nodo):
-               if self._grafo.get_edge_data(nodo, n)['weight'] ==1:
-                   return False
-        return cond
+            if self._grafo.has_edge(nodo, n):
+                almeno_un_vicino = True
+                if self._grafo.get_edge_data(nodo, n)['weight'] == 1:
+                    return False  # <-- veto immediato: niente early-exit sul controllo "almeno uno"
+        return almeno_un_vicino
 
 
 

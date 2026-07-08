@@ -1,12 +1,11 @@
 from dataclasses import dataclass, field
 
-
 @dataclass
 class Artista:
     ArtistId: int
     Name: str
-    brani = []
-    playlist = []
+    brani: list = field(default_factory=list)
+    playlist: list = field(default_factory=list)
 
     def __hash__(self):
         return hash(self.ArtistId)

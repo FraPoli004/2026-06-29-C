@@ -56,7 +56,7 @@ class Controller:
 
 
 
-        lista, score = self._model.getSottoinsiemeOttimo(self, soglia,art)
+        lista, score = self._model.getSottoinsiemeOttimo(soglia,art)
         self._view._txt_result.controls.append(ft.Text(f"la lista di candidati ottimi ha score {score} è composta da: "))
         somma = 0
         for a in lista:
